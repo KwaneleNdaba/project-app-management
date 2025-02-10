@@ -8,7 +8,7 @@ import StoreProvider, { useAppSelector } from "./redux";
 import { ClerkLoading } from "@clerk/nextjs";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -16,13 +16,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     (state) => state.global.isSidebarCollapsed,
   );
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+  const pathname = usePathname();
+
 
   
   const {user} = useUser();
   const router = useRouter();
   
   
-  if(!user){
+  if(!user || pathname.includes("auth")){
     document.documentElement.classList.add("dark");
     router.push("/auth/signin")
   }
