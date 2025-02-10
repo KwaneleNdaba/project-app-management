@@ -23,6 +23,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   
   
   if(!user){
+    document.documentElement.classList.add("dark");
     router.push("/auth/signin")
   }
 
