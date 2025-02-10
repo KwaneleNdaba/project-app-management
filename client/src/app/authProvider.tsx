@@ -3,15 +3,28 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 
-
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolClientId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID ?? "",
-      userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID ?? "",   
+      userPoolClientId: '3foavmqnopmremvgptja54s7c9',
+      userPoolId: '=us-east-1_OWl2NOjgH',
+      loginWith: { // Optional
+        oauth: {
+          domain: 'abcdefghij1234567890-29051e27.auth.us-east-1.amazoncognito.com',
+          scopes: ['openid','email','phone','profile','aws.cognito.signin.user.admin'],
+          redirectSignIn: ['http://localhost:3000/','https://example.com/'],
+          redirectSignOut: ['http://localhost:3000/','https://example.com/'],
+          responseType: 'code',
+        },
+        username: true,
+        email: true, // Optional
+        phone: false, // Optional
+      }
     }
   }
 });
+console.log("User Pool ID:", process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID);
+console.log("User Pool Client ID:", process.env.NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID);
 const formFields = {
   signUp: {
     username: {

@@ -1,0 +1,14 @@
+/* Auth Layout */
+.auth-layout {
+    height: 100vh; /* Full height of the viewport */
+    width: 100%; /* Full width */
+    background-color: var(--customgreys-primarybg); /* Replace with your actual color */
+    display: flex; /* Flex container */
+  }
+  
+  .auth-layout__main {
+  
+    margin: auto;
+    margin-right: 40%;
+
+  }

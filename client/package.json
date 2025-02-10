@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.2.0",
+    "@clerk/nextjs": "^6.11.1",
+    "@clerk/themes": "^2.2.16",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.6",
