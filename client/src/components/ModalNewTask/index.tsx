@@ -21,8 +21,10 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
   const [authorUserId, setAuthorUserId] = useState("");
   const [assignedUserId, setAssignedUserId] = useState("");
   const [projectId, setProjectId] = useState("");
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const handleSubmit = async () => {
+    setErrorMessage(false);
     if (!title || !authorUserId || !(id !== null || projectId)) return;
 
     const formattedStartDate = formatISO(new Date(startDate), {
@@ -32,7 +34,7 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
       representation: "complete",
     });
 
-    await createTask({
+   const response =  await createTask({
       title,
       description,
       status,
@@ -43,11 +45,16 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
       authorUserId: parseInt(authorUserId),
       assignedUserId: parseInt(assignedUserId),
       projectId: id !== null ? Number(id) : Number(projectId),
-    });
+    }).unwrap();
+    if(!response.id){
+      setErrorMessage(true);
+      return;
+    }
+    onClose()
   };
 
   const isFormValid = () => {
-    return title && authorUserId && !(id !== null || projectId);
+    return title && authorUserId && (id !== null || projectId);
   };
 
   const selectStyles =
@@ -58,6 +65,15 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} name="Create New Task">
+
+      {
+        errorMessage &&       <div className="alert alert-danger bg-red-500 text-white p-4 rounded-md">
+        <strong className="font-bold">Error!</strong>
+        <span>Something went wrong. Please try again.</span>
+      </div>
+      }
+
+
       <form
         className="mt-4 space-y-6"
         onSubmit={(e) => {
@@ -129,20 +145,41 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
             onChange={(e) => setDueDate(e.target.value)}
           />
         </div>
-        <input
-          type="text"
-          className={inputStyles}
-          placeholder="Author User ID"
-          value={authorUserId}
-          onChange={(e) => setAuthorUserId(e.target.value)}
-        />
-        <input
-          type="text"
-          className={inputStyles}
-          placeholder="Assigned User ID"
-          value={assignedUserId}
-          onChange={(e) => setAssignedUserId(e.target.value)}
-        />
+      
+
+        <select
+  className={selectStyles}
+  value={authorUserId}
+  onChange={(e) =>
+    setAuthorUserId(e.target.value) // This should set authorUserId
+  }
+>
+  <option value="">Select Author User ID</option>
+  {Array.from({ length: 19 }, (_, index) => index + 1).map((value) => (
+    <option key={value} value={value}> {/* Use 'value' here */}
+      {value}
+    </option>
+  ))}
+</select>
+
+<select
+  className={selectStyles}
+  value={assignedUserId}
+  onChange={(e) =>
+    setAssignedUserId(e.target.value) // This should set assignedUserId
+  }
+>
+  <option value="">Select Assigned User ID</option>
+  {Array.from({ length: 15 }, (_, index) => index + 1).map((value) => (
+    <option key={value} value={value}> {/* Use 'value' here */}
+      {value}
+    </option>
+  ))}
+</select>
+
+
+
+
         {id === null && (
           <input
             type="text"

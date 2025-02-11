@@ -3,12 +3,9 @@
 import React, { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import AuthProvider from "./authProvider";
 import StoreProvider, { useAppSelector } from "./redux";
-import { ClerkLoading } from "@clerk/nextjs";
-import { ClerkProvider } from "@clerk/clerk-react";
 import { useUser } from "@clerk/nextjs";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -16,17 +13,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     (state) => state.global.isSidebarCollapsed,
   );
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
-  const pathname = usePathname();
-
-
-  
   const {user} = useUser();
-  const router = useRouter();
+  const router = useRouter(); 
   
-  
-  if(!user || pathname.includes("auth")){
-
-    router.push("/auth/signin")
+  if(!user){
+    router.push("/auth/signin");
   }
 
   useEffect(() => {

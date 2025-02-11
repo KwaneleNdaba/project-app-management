@@ -1,19 +1,19 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { useUser } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher,  } from '@clerk/nextjs/server';
 
-export default clerkMiddleware(async (auth, req) => {
-  // Check if the user is authenticated
-  if (!auth) {
-    const url = new URL("/auth/signin", req.url);
-    return NextResponse.redirect(url);
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher(['/signin(.*)', '/signup(.*)']);
+
+export default clerkMiddleware((auth, request) => {
+  // If the user is not accessing a public route and is not authenticated, redirect to the sign-in page
+  if (!isPublicRoute(request)) {
+    const user = auth();
+    if (!user) {
+      return NextResponse.redirect("/auth/signin");
+    }
   }
-  return NextResponse.next();
 });
 
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };

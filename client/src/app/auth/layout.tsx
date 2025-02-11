@@ -1,9 +1,18 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
+import { setIsDarkMode } from "@/state";
 import "./styles.css"
+import { useAppDispatch, useAppSelector } from "../redux";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-      document.documentElement.classList.add("dark");
+    const dispatch = useAppDispatch();
+  
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+
+  useEffect(() =>{
+    dispatch(setIsDarkMode(true));
+
+  })
   return (
     <div className="auth-layout">
         <main className="auth-layout__main">
