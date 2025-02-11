@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   
   
   if(!user || pathname.includes("auth")){
-    document.documentElement.classList.add("dark");
+
     router.push("/auth/signin")
   }
 

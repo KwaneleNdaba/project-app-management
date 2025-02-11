@@ -24,7 +24,6 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
       .json({ message: `Error retrieving tasks: ${error.message}` });
   }
 };
-
 export const createTask = async (
   req: Request,
   res: Response
@@ -42,9 +41,20 @@ export const createTask = async (
     authorUserId,
     assignedUserId,
   } = req.body;
+
   try {
+    // Find the last task to get the highest ID
+    const lastTask = await prisma.task.findFirst({
+      orderBy: { id: 'desc' },
+    });
+
+    // Calculate the new ID
+    const newId = lastTask ? lastTask.id + 1 : 1;
+
+    // Create the new task with the manually incremented ID
     const newTask = await prisma.task.create({
       data: {
+        id: newId, // Manually assign the incremented ID
         title,
         description,
         status,
@@ -58,6 +68,7 @@ export const createTask = async (
         assignedUserId,
       },
     });
+
     res.status(201).json(newTask);
   } catch (error: any) {
     res

@@ -34,3 +34,4 @@ export const getTeams = async (req: Request, res: Response): Promise<void> => {
       .json({ message: `Error retrieving teams: ${error.message}` });
   }
 };
+

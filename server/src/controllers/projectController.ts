@@ -16,21 +16,30 @@ export const getProjects = async (
       .json({ message: `Error retrieving projects: ${error.message}` });
   }
 };
-
 export const createProject = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { name, description, startDate, endDate } = req.body;
+
   try {
+    // Find the last project to get the highest ID
+    const lastProject = await prisma.project.findFirst({
+      orderBy: { id: 'desc' },
+    });
+
+    const newId = lastProject ? lastProject.id + 1 : 1;
+
     const newProject = await prisma.project.create({
       data: {
+        id: newId, // Manually assign the incremented ID
         name,
         description,
         startDate,
         endDate,
       },
     });
+
     res.status(201).json(newProject);
   } catch (error: any) {
     res
