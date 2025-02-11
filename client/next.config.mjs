@@ -5,9 +5,7 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "pm-app-s3-bucket.s3.us-east-1.amazonaws.com",
-        port: "",
-        pathname: "/**",
-      }
+      },
     ]
   }
 };
